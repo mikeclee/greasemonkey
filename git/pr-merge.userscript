@@ -1,0 +1,33 @@
+// ==UserScript==
+// @name        PR Merging
+// @namespace   funk.git.pr.merge
+// @include     https://github.disney.com/*/pull/*
+// @version     2
+// @grant       none
+// ==/UserScript==
+(function(unsafeWindow) {
+    // Local vars
+    COMMENT_MESSAGE = "Approvals confirmed, merging";
+    CONFIRM_MESSAGE = "Are you sure?";
+
+    if ($('#js-repo-pjax-container .merge-message .merge-branch-action').length > 0) {
+        $('#partial-new-comment-form-actions')
+        .prepend('<button type="submit" class="btn btn-danger gs-quick-merge">Quick Merge</button>')
+        .find('.gs-quick-merge')
+        .on('mouseenter', function() {
+            $(this).html('ARE YOU SURE?!');
+        })
+        .on('mouseleave', function() {
+            $(this).html('Fast Approve');
+        })
+        .on('click', function(e) {
+            var userConfirm = confirm(CONFIRM_MESSAGE);
+            if (userConfirm) {
+                $('#new_comment_field').val(COMMENT_MESSAGE);
+            } else {
+                alert("Cancelled");
+                e.preventDefault();
+            }
+        })
+    }    
+})(typeof unsafeWindow !== "undefined" ? unsafeWindow : window);

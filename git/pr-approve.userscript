@@ -1,0 +1,26 @@
+// ==UserScript==
+// @name        PR Approve
+// @namespace   funk.git.pr.approve
+// @include     https://github.disney.com/*/pull/*
+// @version     3
+// @grant       none
+// ==/UserScript==
+
+(function(unsafeWindow) {
+    var approvalMessage = "ACR approved from Studio Funk",
+        labelButton = "Fast Approve",
+        confirmMessage = "ARE YOU SURE?!",
+        $container = $('#partial-new-comment-form-actions');
+    
+    $container.prepend('<button type="submit" class="btn btn-danger gs-quick-approve">' + labelButton + '</button>');
+    $container.find('.gs-quick-approve')
+    .on('mouseenter', function(e) {
+        $(e.target).html(confirmMessage);
+    })
+    .on('mouseleave', function(e) {
+        $(e.target).html(labelButton);
+    })
+    .on('click', function() {
+        $('#new_comment_field').val(approvalMessage);
+    });
+})(typeof unsafeWindow !== "undefined" ? unsafeWindow : window);
